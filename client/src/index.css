@@ -2,8 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-main:     #faf0eb;
+  --bg-section:  #f5e8df;
+  --bg-dark:     #ead5c5;
+  --rose:        #8b5e52;
+  --rose-dark:   #6e4a3e;
+  --rose-muted:  #c4a090;
+  --text-dark:   #2e1a14;
+  --text-mid:    #6b4540;
+  --text-light:  #a07060;
+}
+
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased font-sans;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
   }
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .font-playfair { font-family: 'Playfair Display', serif; }
+  .font-inter    { font-family: 'Inter', sans-serif; }
+
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* Slider dots */
+.slider-dot-active {
+  width: 24px !important;
+  border-radius: 9999px !important;
+  background-color: #8b5e52 !important;
 }
