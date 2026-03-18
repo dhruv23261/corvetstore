@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --bg-main:     #faf0eb;
-  --bg-section:  #f5e8df;
-  --bg-dark:     #ead5c5;
-  --rose:        #8b5e52;
-  --rose-dark:   #6e4a3e;
-  --rose-muted:  #c4a090;
-  --text-dark:   #2e1a14;
-  --text-mid:    #6b4540;
-  --text-light:  #a07060;
+  --bg-main:     #FFF8F6;
+  --bg-section:  #FFF0EC;
+  --bg-dark:     #F2C4C8;
+  --rose:        #D4868C;
+  --rose-dark:   #B86B72;
+  --rose-muted:  #E8A8AD;
+  --text-dark:   #5C3D42;
+  --text-mid:    #8C5A60;
+  --text-light:  #C08A8F;
 }
 
 @layer base {
@@ -38,5 +38,5 @@
 .slider-dot-active {
   width: 24px !important;
   border-radius: 9999px !important;
-  background-color: #8b5e52 !important;
+  background-color: #D4868C !important;
 }

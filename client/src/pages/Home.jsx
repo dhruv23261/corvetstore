@@ -11,48 +11,37 @@ import MobileBottomNav from '../components/MobileBottomNav';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[#faf6f0]">
-      {/* Announcement bar */}
+    <div className="min-h-screen bg-[#FFF8F6]">
       <AnnouncementBar />
-
-      {/* Main header */}
       <Navbar cartCount={0} wishlistCount={0} />
-
-      {/* Desktop categories nav */}
       <CategoriesBar />
-
-      {/* Hero slider */}
       <HeroSlider />
-
-      {/* Collection categories */}
       <CategorySection />
 
-      {/* Divider */}
-      <div className="h-px bg-[#e8d5bc] mx-4 md:mx-0" />
+      {/* Soft divider */}
+      <div className="h-px bg-gradient-to-r from-transparent via-[#F2C4C8]/50 to-transparent mx-8" />
 
-      {/* Featured Products */}
       <FeaturedProducts />
-
-      {/* Shop By Video */}
       <ShopByVideo />
 
       {/* Promo banner */}
-      <section className="bg-gradient-to-r from-[#7a5c2e] to-[#3d2b1f] py-12 px-6 text-center">
-        <h2 className="font-playfair text-2xl md:text-4xl font-bold text-white mb-2">
-          Free Shipping on Orders Above ₹499
-        </h2>
-        <p className="text-[#c9a97a] text-sm md:text-base mb-6 font-inter">
-          Shop our premium collection and enjoy complimentary delivery
-        </p>
-        <button className="bg-white text-[#7a5c2e] font-inter font-bold text-sm px-8 py-3 rounded-full hover:bg-[#f5ede0] transition active:scale-95">
-          SHOP NOW
-        </button>
+      <section className="bg-gradient-to-r from-[#D4868C] to-[#B86B72] py-14 md:py-16 px-6 text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTMwVjBoLTEydjRoMTJ6TTI0IDI0aDEydi0ySDI0djJ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-50" />
+        <div className="relative z-10">
+          <h2 className="font-playfair text-2xl md:text-4xl font-bold text-white mb-3">
+            Free Shipping on Orders Above ₹499
+          </h2>
+          <p className="text-[#FFF0EC]/80 text-sm md:text-base mb-8 font-inter max-w-lg mx-auto">
+            Shop our premium collection and enjoy complimentary delivery
+          </p>
+          <button className="bg-[#FFF0EC] text-[#D4868C] font-inter font-bold text-sm px-10 py-3.5 rounded-full
+            hover:bg-white transition-all duration-200 active:scale-95 shadow-lg hover:shadow-xl">
+            SHOP NOW
+          </button>
+        </div>
       </section>
 
-      {/* Footer */}
       <Footer />
-
-      {/* Mobile bottom nav — fixed */}
       <MobileBottomNav />
     </div>
   );

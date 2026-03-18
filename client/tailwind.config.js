@@ -13,11 +13,11 @@ export default {
       colors: {
         // New Palette requested by user
         custom: {
-          light: '#F5F5F5',    // Off-white / Main background
-          base: '#F0E6DB',     // Light beige / UI backgrounds
-          accent: '#E6D5C5',   // Dusty beige / Borders, Secondary backgrounds
-          dark: '#8B7874',     // Muted taupe / Text, Buttons, Accents
-          text: '#4A3B39',     // Deeper shade of taupe for primary text (derived from #8B7874 for better contrast)
+          light: '#FFF8F6',    // Warm white / Main background
+          base: '#FFF0EC',     // Light peach / UI backgrounds
+          accent: '#F2C4C8',   // Light pink / Borders, Secondary backgrounds
+          dark: '#D4868C',     // Soft rose / Buttons, Accents
+          text: '#5C3D42',     // Deep rose / Primary text
         }
       },
       animation: {
