@@ -35,20 +35,20 @@ export default function Products() {
     catch (err) { console.error('Failed to delete', err); }
   };
 
-  const inputClass = `w-full px-4 py-3 rounded-2xl border border-[#F2C4C8]/40 bg-[#FFF8F6]/50
-    text-[#5C3D42] placeholder:text-[#D4868C]/35 text-sm
-    focus:outline-none focus:ring-2 focus:ring-[#F2C4C8] focus:border-transparent transition-all`;
+  const inputClass = `w-full px-4 py-3 rounded-2xl border border-[#DCC8BC]/70 bg-[#F6EFE9]/60
+    text-[#3C2F2A] placeholder:text-[#6A5A53]/55 text-sm
+    focus:outline-none focus:ring-2 focus:ring-[#DCC8BC] focus:border-transparent transition-all`;
 
   return (
     <div className="animate-fade-in">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-playfair text-2xl font-semibold text-[#5C3D42]">Products</h1>
-          <p className="text-sm text-[#D4868C] mt-1">{products.length} products</p>
+          <h1 className="font-playfair text-2xl font-semibold text-[#3C2F2A]">Products</h1>
+          <p className="text-sm text-[#8B776E] mt-1">{products.length} products</p>
         </div>
         <button onClick={() => setShowForm(!showForm)}
-          className="px-5 py-2.5 rounded-2xl bg-[#D4868C] text-white text-sm font-medium
-            hover:bg-[#B86B72] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#D4868C]/20">
+          className="px-5 py-2.5 rounded-2xl bg-[#8B776E] text-white text-sm font-medium
+            hover:bg-[#6E5B54] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#8B776E]/20">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showForm ? "M6 18L18 6M6 6l12 12" : "M12 4v16m8-8H4"} />
           </svg>
@@ -57,29 +57,29 @@ export default function Products() {
       </div>
 
       {showForm && (
-        <div className="bg-white rounded-3xl border border-[#F2C4C8]/20 p-7 shadow-sm mb-6">
-          <h2 className="font-playfair text-lg font-semibold text-[#5C3D42] mb-5">New Product</h2>
+        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-7 shadow-sm mb-6">
+          <h2 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-5">New Product</h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#5C3D42] mb-1.5">Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Name</label>
               <input id="name" type="text" required value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Product name" className={inputClass} />
             </div>
             <div>
-              <label htmlFor="price" className="block text-sm font-medium text-[#5C3D42] mb-1.5">Price (₹)</label>
+              <label htmlFor="price" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Price (₹)</label>
               <input id="price" type="number" required min="0" step="0.01" value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0.00" className={inputClass} />
             </div>
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-[#5C3D42] mb-1.5">Category</label>
+              <label htmlFor="category" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Category</label>
               <select id="category" value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputClass}>
                 {categories.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-[#5C3D42] mb-1.5">
-                Image URL <span className="text-[#D4868C]/40">(optional)</span>
+              <label htmlFor="imageUrl" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">
+                Image URL <span className="text-[#6A5A53]/55">(optional)</span>
               </label>
               <input id="imageUrl" type="url" value={form.imageUrl}
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
@@ -87,8 +87,8 @@ export default function Products() {
             </div>
             <div className="sm:col-span-2">
               <button type="submit" disabled={saving}
-                className="px-6 py-3 rounded-2xl bg-[#D4868C] text-white text-sm font-medium
-                  hover:bg-[#B86B72] transition-all duration-200 disabled:opacity-50 shadow-lg shadow-[#D4868C]/20">
+                className="px-6 py-3 rounded-2xl bg-[#8B776E] text-white text-sm font-medium
+                  hover:bg-[#6E5B54] transition-all duration-200 disabled:opacity-50 shadow-lg shadow-[#8B776E]/20">
                 {saving ? 'Saving...' : 'Add Product'}
               </button>
             </div>
@@ -99,24 +99,24 @@ export default function Products() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white rounded-3xl border border-[#F2C4C8]/20 p-4 animate-pulse">
-              <div className="w-full h-44 bg-[#FFF0EC] rounded-2xl mb-3" />
-              <div className="h-4 bg-[#FFF0EC] rounded w-3/4 mb-2" />
-              <div className="h-3 bg-[#FFF0EC] rounded w-1/2" />
+            <div key={i} className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-4 animate-pulse">
+              <div className="w-full h-44 bg-[#EFE3DA] rounded-2xl mb-3" />
+              <div className="h-4 bg-[#EFE3DA] rounded w-3/4 mb-2" />
+              <div className="h-3 bg-[#EFE3DA] rounded w-1/2" />
             </div>
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#F2C4C8]/20 p-16 text-center shadow-sm">
+        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-16 text-center shadow-sm">
           <div className="text-5xl mb-4">📦</div>
-          <h3 className="font-playfair text-lg font-semibold text-[#5C3D42] mb-1">No products yet</h3>
-          <p className="text-sm text-[#D4868C]">Add your first product to get started</p>
+          <h3 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-1">No products yet</h3>
+          <p className="text-sm text-[#8B776E]">Add your first product to get started</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {products.map((product) => (
             <div key={product._id}
-              className="bg-white rounded-3xl border border-[#F2C4C8]/20 overflow-hidden shadow-sm
+              className="bg-white rounded-3xl border border-[#DCC8BC]/60 overflow-hidden shadow-sm
                 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group">
               <div className="relative overflow-hidden">
                 <img src={product.imageUrl || getImageByIndex(0)} alt={product.name}
@@ -130,13 +130,13 @@ export default function Products() {
                   </svg>
                 </button>
                 {product.badge && (
-                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#D4868C] text-white">{product.badge}</span>
+                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#8B776E] text-white">{product.badge}</span>
                 )}
               </div>
               <div className="p-4">
-                <span className="text-xs font-medium text-[#D4868C] bg-[#FFF0EC] px-2.5 py-0.5 rounded-full">{product.category}</span>
-                <h3 className="font-medium text-[#5C3D42] mt-2 text-sm">{product.name}</h3>
-                <p className="text-[#D4868C] font-bold mt-1">₹{product.price}</p>
+                <span className="text-xs font-medium text-[#6E5B54] bg-[#EFE3DA] px-2.5 py-0.5 rounded-full border border-[#DCC8BC]/60">{product.category}</span>
+                <h3 className="font-medium text-[#3C2F2A] mt-2 text-sm">{product.name}</h3>
+                <p className="text-[#8B776E] font-bold mt-1">₹{product.price}</p>
               </div>
             </div>
           ))}

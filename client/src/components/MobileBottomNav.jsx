@@ -10,20 +10,20 @@ const navItems = [
 const MobileBottomNav = () => {
   const [active, setActive] = useState('home');
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-[#F2C4C8]/50 shadow-[0_-4px_30px_rgba(212,134,140,0.08)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-[#DCC8BC]/70 shadow-[0_-4px_30px_rgba(60,47,42,0.06)]">
       <div className="flex items-center justify-around px-2 pt-2.5 pb-4">
         {navItems.map(item => {
           const isActive = active === item.id;
           return (
             <button key={item.id} onClick={() => setActive(item.id)} className="flex flex-col items-center gap-1 relative px-4 py-1">
-              <span className={`absolute -top-1 w-5 h-0.5 rounded-full bg-[#D4868C] transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
-              <div className={`relative transition-all duration-200 ${isActive ? 'text-[#D4868C] scale-110' : 'text-[#D4868C]/30'}`}>
+              <span className={`absolute -top-1 w-5 h-0.5 rounded-full bg-[#8B776E] transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
+              <div className={`relative transition-all duration-200 ${isActive ? 'text-[#8B776E] scale-110' : 'text-[#8B776E]/30'}`}>
                 {item.icon(isActive)}
                 {item.id === 'cart' && (
-                  <span className="absolute -top-2 -right-2 bg-[#D4868C] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{item.badge}</span>
+                  <span className="absolute -top-2 -right-2 bg-[#8B776E] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{item.badge}</span>
                 )}
               </div>
-              <span className={`text-[10px] font-inter font-semibold transition-colors duration-200 ${isActive ? 'text-[#D4868C]' : 'text-[#D4868C]/30'}`}>{item.label}</span>
+              <span className={`text-[10px] font-inter font-semibold transition-colors duration-200 ${isActive ? 'text-[#8B776E]' : 'text-[#8B776E]/30'}`}>{item.label}</span>
             </button>
           );
         })}

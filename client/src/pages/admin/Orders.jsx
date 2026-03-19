@@ -31,46 +31,46 @@ export default function Orders() {
   return (
     <div className="animate-fade-in">
       <div className="mb-6">
-        <h1 className="font-playfair text-2xl font-semibold text-[#5C3D42]">Orders</h1>
-        <p className="text-sm text-[#D4868C] mt-1">{orders.length} orders</p>
+        <h1 className="font-playfair text-2xl font-semibold text-[#3C2F2A]">Orders</h1>
+        <p className="text-sm text-[#8B776E] mt-1">{orders.length} orders</p>
       </div>
 
       {loading ? (
-        <div className="bg-white rounded-3xl border border-[#F2C4C8]/20 p-6 animate-pulse">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-[#FFF0EC] rounded-xl mb-3" />)}
+        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-6 animate-pulse">
+          {[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-[#EFE3DA] rounded-xl mb-3" />)}
         </div>
       ) : orders.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#F2C4C8]/20 p-16 text-center shadow-sm">
+        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-16 text-center shadow-sm">
           <div className="text-5xl mb-4">🛒</div>
-          <h3 className="font-playfair text-lg font-semibold text-[#5C3D42] mb-1">No orders yet</h3>
-          <p className="text-sm text-[#D4868C]">Orders will appear here</p>
+          <h3 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-1">No orders yet</h3>
+          <p className="text-sm text-[#8B776E]">Orders will appear here</p>
         </div>
       ) : (
-        <div className="bg-white rounded-3xl border border-[#F2C4C8]/20 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#F2C4C8]/20 bg-[#FFF8F6]/50">
-                  <th className="text-left px-6 py-4 text-[#D4868C] font-medium">Order</th>
-                  <th className="text-left px-6 py-4 text-[#D4868C] font-medium">Customer</th>
-                  <th className="text-left px-6 py-4 text-[#D4868C] font-medium">Total</th>
-                  <th className="text-left px-6 py-4 text-[#D4868C] font-medium">Status</th>
-                  <th className="text-left px-6 py-4 text-[#D4868C] font-medium">Date</th>
+                <tr className="border-b border-[#DCC8BC]/60 bg-[#F6EFE9]/60">
+                  <th className="text-left px-6 py-4 text-[#6E5B54] font-medium">Order</th>
+                  <th className="text-left px-6 py-4 text-[#6E5B54] font-medium">Customer</th>
+                  <th className="text-left px-6 py-4 text-[#6E5B54] font-medium">Total</th>
+                  <th className="text-left px-6 py-4 text-[#6E5B54] font-medium">Status</th>
+                  <th className="text-left px-6 py-4 text-[#6E5B54] font-medium">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order._id} className="border-b border-[#F2C4C8]/15 last:border-0 hover:bg-[#FFF8F6]/50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-[#5C3D42]">{order.orderNumber}</td>
-                    <td className="px-6 py-4 text-[#5C3D42]">{order.customer?.name}</td>
-                    <td className="px-6 py-4 text-[#5C3D42] font-medium">₹{order.total?.toLocaleString()}</td>
+                  <tr key={order._id} className="border-b border-[#DCC8BC]/50 last:border-0 hover:bg-[#F6EFE9]/60 transition-colors">
+                    <td className="px-6 py-4 font-medium text-[#3C2F2A]">{order.orderNumber}</td>
+                    <td className="px-6 py-4 text-[#3C2F2A]">{order.customer?.name}</td>
+                    <td className="px-6 py-4 text-[#3C2F2A] font-medium">₹{order.total?.toLocaleString()}</td>
                     <td className="px-6 py-4">
                       <select value={order.status} onChange={(e) => updateStatus(order._id, e.target.value)}
                         className={`px-3 py-1 rounded-full text-xs font-medium border cursor-pointer ${statusColors[order.status] || ''}`}>
                         {['Processing', 'Shipped', 'Delivered', 'Cancelled'].map(s => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </td>
-                    <td className="px-6 py-4 text-[#D4868C]">{formatDate(order.createdAt)}</td>
+                    <td className="px-6 py-4 text-[#6A5A53]">{formatDate(order.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>

@@ -11,14 +11,18 @@ export default {
         'inter': ['Inter', 'sans-serif'],
       },
       colors: {
-        // New Palette requested by user
-        custom: {
-          light: '#FFF8F6',    // Warm white / Main background
-          base: '#FFF0EC',     // Light peach / UI backgrounds
-          accent: '#F2C4C8',   // Light pink / Borders, Secondary backgrounds
-          dark: '#D4868C',     // Soft rose / Buttons, Accents
-          text: '#5C3D42',     // Deep rose / Primary text
-        }
+        // Warm beige + taupe palette (matches provided screenshots)
+        brand: {
+          bg: '#F6EFE9',        // main page background
+          section: '#EFE3DA',   // section background
+          surface: '#FFFFFF',   // cards/nav surface
+          tint: '#E7D6CB',      // subtle tinted surfaces
+          border: '#DCC8BC',    // borders/dividers
+          accent: '#8B776E',    // primary action / highlights
+          accentDark: '#6E5B54',// hover/pressed
+          text: '#3C2F2A',      // main text
+          muted: '#6A5A53',     // secondary text
+        },
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

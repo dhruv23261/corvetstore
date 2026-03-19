@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 const slides = [
-  { id: 1, title: 'Your Daily Hydration Partner', subtitle: '', cta: 'SHOP NOW', image: '/hero1.png', bg: 'from-[#F2C4C8] via-[#FFF0EC] to-[#FFF8F6]' },
-  { id: 2, title: 'Flip it, Sip it', subtitle: 'Your Way', cta: 'SHOP NOW', image: '/hero2.png', bg: 'from-[#FFF0EC] via-[#F2C4C8] to-[#FFF8F6]' },
+  { id: 1, title: 'Your Daily Hydration Partner', subtitle: '', cta: 'SHOP NOW', image: '/hero1.png', bg: 'from-[#E7D6CB] via-[#EFE3DA] to-[#F6EFE9]' },
+  { id: 2, title: 'Flip it, Sip it', subtitle: 'Your Way', cta: 'SHOP NOW', image: '/hero2.png', bg: 'from-[#EFE3DA] via-[#E7D6CB] to-[#F6EFE9]' },
 ];
 
 const HeroSlider = () => {
@@ -38,7 +38,7 @@ const HeroSlider = () => {
             </p>
           )}
           {!slide.subtitle && <div className="mb-10" />}
-          <button className="bg-white/95 hover:bg-white text-[#D4868C] font-inter font-bold text-sm px-10 py-3.5 rounded-full
+          <button className="bg-white/95 hover:bg-white text-[#6E5B54] font-inter font-bold text-sm px-10 py-3.5 rounded-full
             active:scale-95 transition-all duration-200 shadow-xl shadow-black/10 backdrop-blur-sm tracking-wider uppercase hover:shadow-2xl">
             {slide.cta}
           </button>
@@ -60,11 +60,11 @@ const HeroSlider = () => {
 
       {/* Arrows */}
       <button onClick={() => setCurrent(c => (c - 1 + slides.length) % slides.length)}
-        className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/70 text-white hover:text-[#5C3D42] backdrop-blur-sm rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all">
+        className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/70 text-white hover:text-[#3C2F2A] backdrop-blur-sm rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
       </button>
       <button onClick={() => setCurrent(c => (c + 1) % slides.length)}
-        className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/70 text-white hover:text-[#5C3D42] backdrop-blur-sm rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all">
+        className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-20 bg-white/30 hover:bg-white/70 text-white hover:text-[#3C2F2A] backdrop-blur-sm rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center shadow-lg transition-all">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
       </button>
 

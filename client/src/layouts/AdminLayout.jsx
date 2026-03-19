@@ -22,22 +22,22 @@ export default function AdminLayout({ onLogout }) {
   };
 
   return (
-    <div className="flex h-screen bg-[#FFF8F6] font-inter">
+    <div className="flex h-screen bg-[#F6EFE9] font-inter">
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/15 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
-      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-[260px] bg-white border-r border-[#F2C4C8]/30
+      <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-[260px] bg-white border-r border-[#DCC8BC]/60
         transform transition-transform duration-200 ease-in-out flex flex-col
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
 
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-[#F2C4C8]/20">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#FFF0EC] to-[#F2C4C8] flex items-center justify-center shadow-sm">
-            <span className="text-[#D4868C] font-playfair font-bold text-xl">A</span>
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-[#DCC8BC]/60">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#EFE3DA] to-[#E7D6CB] flex items-center justify-center shadow-sm">
+            <span className="text-[#8B776E] font-playfair font-bold text-xl">A</span>
           </div>
           <div>
-            <span className="font-playfair font-semibold text-[#5C3D42] text-lg block leading-tight">Aren Admin</span>
-            <span className="text-[10px] text-[#D4868C]">Store Management</span>
+            <span className="font-playfair font-semibold text-[#3C2F2A] text-lg block leading-tight">Aren Admin</span>
+            <span className="text-[10px] text-[#8B776E]">Store Management</span>
           </div>
         </div>
 
@@ -48,47 +48,47 @@ export default function AdminLayout({ onLogout }) {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-150
                 ${isActive
-                  ? 'bg-[#FFF0EC] text-[#5C3D42] shadow-sm'
-                  : 'text-[#D4868C] hover:bg-[#FFF0EC]/50 hover:text-[#5C3D42]'}`}>
+                  ? 'bg-[#EFE3DA] text-[#3C2F2A] shadow-sm'
+                  : 'text-[#8B776E] hover:bg-[#EFE3DA]/60 hover:text-[#3C2F2A]'}`}>
               <item.icon />
               {item.label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-[#F2C4C8]/20">
+        <div className="p-4 border-t border-[#DCC8BC]/60">
           <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-[#FFF0EC] flex items-center justify-center text-[#D4868C] font-semibold text-sm">
+            <div className="w-8 h-8 rounded-full bg-[#EFE3DA] flex items-center justify-center text-[#8B776E] font-semibold text-sm">
               {adminUser.name?.charAt(0) || 'A'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#5C3D42] truncate">{adminUser.name || 'Admin'}</p>
-              <p className="text-[10px] text-[#D4868C] truncate">{adminUser.email || ''}</p>
+              <p className="text-sm font-medium text-[#3C2F2A] truncate">{adminUser.name || 'Admin'}</p>
+              <p className="text-[10px] text-[#8B776E] truncate">{adminUser.email || ''}</p>
             </div>
           </div>
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-[#F2C4C8]/20 flex items-center justify-between px-6 shrink-0">
+        <header className="h-16 bg-white/85 backdrop-blur-md border-b border-[#DCC8BC]/60 flex items-center justify-between px-6 shrink-0">
           <button onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-2xl hover:bg-[#FFF0EC]/50 transition-colors" aria-label="Open sidebar">
-            <svg className="w-5 h-5 text-[#D4868C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            className="lg:hidden p-2 rounded-2xl hover:bg-[#EFE3DA]/60 transition-colors" aria-label="Open sidebar">
+            <svg className="w-5 h-5 text-[#8B776E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
           <div className="hidden lg:block">
-            <h2 className="text-sm text-[#D4868C]">Welcome back, <span className="text-[#5C3D42] font-medium">{adminUser.name || 'Admin'}</span></h2>
+            <h2 className="text-sm text-[#8B776E]">Welcome back, <span className="text-[#3C2F2A] font-medium">{adminUser.name || 'Admin'}</span></h2>
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-2 rounded-2xl hover:bg-[#FFF0EC]/50 transition-colors" aria-label="Notifications">
-              <svg className="w-5 h-5 text-[#D4868C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button className="p-2 rounded-2xl hover:bg-[#EFE3DA]/60 transition-colors" aria-label="Notifications">
+              <svg className="w-5 h-5 text-[#8B776E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </button>
-            <div className="w-px h-6 bg-[#F2C4C8]/30" />
+            <div className="w-px h-6 bg-[#DCC8BC]/70" />
             <button onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm text-[#D4868C] hover:bg-red-50 hover:text-red-600 transition-all">
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm text-[#8B776E] hover:bg-red-50 hover:text-red-600 transition-all">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
