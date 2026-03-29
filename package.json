@@ -1,7 +1,7 @@
 {
-  "name": "aren-store",
+  "name": "corvet",
   "version": "1.0.0",
-  "description": "Full-stack AREN STORE application",
+  "description": "Full-stack CORVET application",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

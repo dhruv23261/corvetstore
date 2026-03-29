@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const connectDB = require('./config/db');
 
@@ -23,8 +24,8 @@ app.use(cors({
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    // Also allow any netlify subdomain
-    if (origin.endsWith('.netlify.app')) {
+    // Also allow any netlify or vercel subdomain
+    if (origin.endsWith('.netlify.app') || origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
@@ -40,15 +41,24 @@ app.use(express.json());
 app.use('/api/health', require('./routes/health'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/categories'));
+app.use('/api/hero', require('./routes/hero'));
+app.use('/api/upload', require('./routes/upload'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/customers', require('./routes/customers'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 
 // Root
 app.get('/', (req, res) => {
-  res.json({ status: 'AREN STORE API is running', timestamp: new Date().toISOString() });
+  res.json({ status: 'CORVET API is running', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Startup logic — only runs when not in serverless env
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel Serverless
+module.exports = app;

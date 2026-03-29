@@ -16,12 +16,10 @@ export default function Settings() {
           <h2 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-5">Store Information</h2>
           <div className="space-y-4">
             <div>
-              <label htmlFor="storeName" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Store Name</label>
-              <input id="storeName" type="text" defaultValue="Aren Store" className={inputClass} />
+              <input id="storeName" type="text" defaultValue="Corvet" className={inputClass} />
             </div>
             <div>
-              <label htmlFor="storeEmail" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Contact Email</label>
-              <input id="storeEmail" type="email" defaultValue="arenstore@gmail.com" className={inputClass} />
+              <input id="storeEmail" type="email" defaultValue="corvet@gmail.com" className={inputClass} />
             </div>
           </div>
         </div>

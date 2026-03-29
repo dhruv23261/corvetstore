@@ -1,9 +1,9 @@
 const express = require('express');
 const Customer = require('../models/Customer');
-const authMiddleware = require('../middleware/auth');
+const { verifyToken } = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const customers = await Customer.find().sort({ createdAt: -1 });
     res.json(customers);

@@ -2,16 +2,30 @@ import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { getImageByIndex } from '../../data/imageLinks';
 
-const categories = ['Bottles', 'Tumblers', 'Candles', 'Gifting', 'Accessories'];
-
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: '', price: '', category: categories[0], imageUrl: '' });
+  const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState({ name: '', price: '', originalPrice: '', category: '', imageUrl: '', sequence: 0, badge: '', description: '', dimensions: '' });
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => { 
+    fetchProducts();
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await api.get('/categories');
+      setCategories(data);
+      if (data.length > 0 && !form.category) {
+        setForm(prev => ({ ...prev, category: data[0].name }));
+      }
+    } catch { setCategories([]); }
+  };
 
   const fetchProducts = async () => {
     try { const { data } = await api.get('/products'); setProducts(data); }
@@ -22,12 +36,55 @@ export default function Products() {
   const handleSubmit = async (e) => {
     e.preventDefault(); setSaving(true);
     try {
-      const payload = { ...form, price: parseFloat(form.price), imageUrl: form.imageUrl || getImageByIndex(products.length) };
-      await api.post('/products', payload);
-      setForm({ name: '', price: '', category: categories[0], imageUrl: '' });
-      setShowForm(false); fetchProducts();
-    } catch (err) { console.error('Failed to add product', err); }
+      const payload = { 
+        ...form, 
+        price: parseFloat(form.price), 
+        originalPrice: parseFloat(form.originalPrice) || 0,
+        sequence: parseInt(form.sequence) || 0 
+      };
+      if (editingId) {
+        await api.put(`/products/${editingId}`, payload);
+      } else {
+        await api.post('/products', payload);
+      }
+      resetForm(); fetchProducts();
+    } catch (err) { console.error('Failed to save product', err); }
     finally { setSaving(false); }
+  };
+
+  const handleEdit = (p) => {
+    setForm({ 
+      name: p.name, 
+      price: p.price, 
+      originalPrice: p.originalPrice || '',
+      category: p.category, 
+      imageUrl: p.imageUrl, 
+      sequence: p.sequence || 0, 
+      badge: p.badge || '',
+      description: p.description || '',
+      dimensions: p.dimensions || ''
+    });
+    setEditingId(p._id); setShowModal(true);
+  };
+
+  const resetForm = () => {
+    setForm({ name: '', price: '', originalPrice: '', category: categories[0]?.name || '', imageUrl: '', sequence: 0, badge: '', description: '', dimensions: '' });
+    setEditingId(null); setShowModal(false);
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const { data } = await api.post('/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setForm({ ...form, imageUrl: data.imageUrl });
+    } catch (err) { alert('Upload failed'); }
+    finally { setUploading(false); }
   };
 
   const deleteProduct = async (id) => {
@@ -46,53 +103,99 @@ export default function Products() {
           <h1 className="font-playfair text-2xl font-semibold text-[#3C2F2A]">Products</h1>
           <p className="text-sm text-[#8B776E] mt-1">{products.length} products</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)}
+        <button onClick={() => setShowModal(true)}
           className="px-5 py-2.5 rounded-2xl bg-[#8B776E] text-white text-sm font-medium
             hover:bg-[#6E5B54] transition-all duration-200 flex items-center gap-2 shadow-lg shadow-[#8B776E]/20">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showForm ? "M6 18L18 6M6 6l12 12" : "M12 4v16m8-8H4"} />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
-          {showForm ? 'Cancel' : 'Add Product'}
+          Add Product
         </button>
       </div>
 
-      {showForm && (
-        <div className="bg-white rounded-3xl border border-[#DCC8BC]/60 p-7 shadow-sm mb-6">
-          <h2 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-5">New Product</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Name</label>
-              <input id="name" type="text" required value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Product name" className={inputClass} />
-            </div>
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Price (₹)</label>
-              <input id="price" type="number" required min="0" step="0.01" value={form.price}
-                onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0.00" className={inputClass} />
-            </div>
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">Category</label>
-              <select id="category" value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputClass}>
-                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="imageUrl" className="block text-sm font-medium text-[#3C2F2A] mb-1.5">
-                Image URL <span className="text-[#6A5A53]/55">(optional)</span>
-              </label>
-              <input id="imageUrl" type="url" value={form.imageUrl}
-                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                placeholder="https://images.unsplash.com/..." className={inputClass} />
-            </div>
-            <div className="sm:col-span-2">
-              <button type="submit" disabled={saving}
-                className="px-6 py-3 rounded-2xl bg-[#8B776E] text-white text-sm font-medium
-                  hover:bg-[#6E5B54] transition-all duration-200 disabled:opacity-50 shadow-lg shadow-[#8B776E]/20">
-                {saving ? 'Saving...' : 'Add Product'}
+      {/* --- Modal Form --- */}
+      {showModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={resetForm} />
+          <div className="bg-white w-full max-w-2xl rounded-[32px] overflow-hidden shadow-2xl relative z-10 animate-scale-up max-h-[90vh] flex flex-col">
+            <div className="px-8 py-6 border-b border-[#DCC8BC]/60 flex items-center justify-between sticky top-0 bg-white z-20">
+              <h2 className="font-playfair text-xl font-semibold text-[#3C2F2A]">{editingId ? 'Edit Product' : 'New Product'}</h2>
+              <button onClick={resetForm} className="p-2 rounded-xl hover:bg-[#F6EFE9] transition-colors">
+                <svg className="w-5 h-5 text-[#8B776E]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
-          </form>
+
+            <div className="p-8 overflow-y-auto">
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="sm:col-span-2">
+                  <label htmlFor="name" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Product Name</label>
+                  <input id="name" type="text" required value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Enter name" className={inputClass} />
+                </div>
+                <div>
+                  <label htmlFor="price" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Price (₹)</label>
+                  <input id="price" type="number" required min="0" step="0.01" value={form.price}
+                    onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0.00" className={inputClass} />
+                </div>
+                <div>
+                  <label htmlFor="originalPrice" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Original Price (₹)</label>
+                  <input id="originalPrice" type="number" min="0" step="0.01" value={form.originalPrice}
+                    onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} placeholder="0.00" className={inputClass} />
+                </div>
+                <div>
+                  <label htmlFor="category" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Category</label>
+                  <select id="category" value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputClass} required>
+                    {categories.length === 0 && <option value="">No categories found</option>}
+                    {categories.map((c) => <option key={c._id} value={c.name}>{c.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="badge" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Badge</label>
+                  <input id="badge" type="text" value={form.badge}
+                    onChange={(e) => setForm({ ...form, badge: e.target.value })} placeholder="Bestseller, New, etc" className={inputClass} />
+                </div>
+                <div>
+                  <label htmlFor="sequence" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Sequence</label>
+                  <input id="sequence" type="number" value={form.sequence}
+                    onChange={(e) => setForm({ ...form, sequence: e.target.value })} placeholder="0" className={inputClass} />
+                </div>
+                <div>
+                  <label htmlFor="dimensions" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Dimensions</label>
+                  <input id="dimensions" type="text" value={form.dimensions}
+                    onChange={(e) => setForm({ ...form, dimensions: e.target.value })} placeholder="12x8x4 inches" className={inputClass} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="description" className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Description</label>
+                  <textarea id="description" rows={3} value={form.description}
+                    onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Tell us more about this product..." className={`${inputClass} resize-none mb-2`} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-bold text-[#8B776E] uppercase tracking-wider mb-2">Image</label>
+                  <div className="flex items-center gap-5">
+                    <div className="w-16 h-16 rounded-2xl bg-[#EFE3DA]/30 border border-[#DCC8BC] overflow-hidden flex items-center justify-center shrink-0">
+                      {form.imageUrl ? <img src={form.imageUrl} className="w-full h-full object-cover" alt="Preview" /> : <span className="text-lg">📸</span>}
+                    </div>
+                    <label className="flex-1 cursor-pointer">
+                      <div className="bg-[#F6EFE9] border-2 border-dashed border-[#DCC8BC] rounded-2xl py-4 text-center text-xs font-bold text-[#8B776E] hover:border-[#8B776E] transition-all">
+                        {uploading ? 'Processing Image...' : 'Drop or Tap to Upload'}
+                      </div>
+                      <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
+                    </label>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div className="px-8 py-6 bg-[#F6EFE9]/50 border-t border-[#DCC8BC]/60 flex items-center justify-end gap-4 sticky bottom-0 z-20">
+              <button onClick={resetForm} className="px-6 py-2.5 text-sm font-semibold text-[#8B776E] hover:text-[#3C2F2A] transition-colors">Discard</button>
+              <button onClick={handleSubmit} disabled={saving || uploading}
+                className="px-8 py-3 rounded-2xl bg-[#8B776E] text-white text-sm font-bold
+                  hover:bg-[#6E5B54] transition-all duration-200 disabled:opacity-50 shadow-lg shadow-[#8B776E]/20">
+                {saving ? 'Saving...' : editingId ? 'Apply Changes' : 'Publish Product'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -121,14 +224,24 @@ export default function Products() {
               <div className="relative overflow-hidden">
                 <img src={product.imageUrl || getImageByIndex(0)} alt={product.name}
                   className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
-                <button onClick={() => deleteProduct(product._id)}
-                  className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center
-                    opacity-0 group-hover:opacity-100 transition-all hover:bg-red-50 hover:text-red-500 shadow-sm"
-                  aria-label={`Delete ${product.name}`}>
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
+                <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
+                  <button onClick={() => handleEdit(product)}
+                    className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center
+                      hover:bg-[#EFE3DA] hover:text-[#8B776E] shadow-sm"
+                    aria-label={`Edit ${product.name}`}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-5M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                  </button>
+                  <button onClick={() => deleteProduct(product._id)}
+                    className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center
+                      hover:bg-red-50 hover:text-red-500 shadow-sm"
+                    aria-label={`Delete ${product.name}`}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
                 {product.badge && (
                   <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#8B776E] text-white">{product.badge}</span>
                 )}

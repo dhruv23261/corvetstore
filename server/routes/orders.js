@@ -1,9 +1,9 @@
 const express = require('express');
 const Order = require('../models/Order');
-const authMiddleware = require('../middleware/auth');
+const { verifyToken } = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
@@ -12,7 +12,7 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
-router.put('/:id/status', authMiddleware, async (req, res) => {
+router.put('/:id/status', verifyToken, async (req, res) => {
   try {
     const order = await Order.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
     if (!order) return res.status(404).json({ message: 'Not found' });

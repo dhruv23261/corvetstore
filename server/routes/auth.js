@@ -1,67 +1,54 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const Admin = require('../models/Admin');
-const { generateOtp, storeOtp, verifyOtp } = require('../auth/otpStore');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+const sendEmail = require('../utils/email');
 const router = express.Router();
 
-// POST /api/auth/login — Email + Password login
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ message: 'Email and password required' });
+const signToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+};
 
+// REGISTER
+router.post('/register', async (req, res) => {
   try {
-    const admin = await Admin.findOne({ email: email.toLowerCase() });
-    if (!admin) return res.status(401).json({ message: 'Invalid credentials' });
+    const { name, email, password } = req.body;
+    
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-    const match = await admin.comparePassword(password);
-    if (!match) return res.status(401).json({ message: 'Invalid credentials' });
+    const user = await User.create({ name, email, password });
+    
+    // Optional: Send welcome email
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Welcome to Corvet Store!',
+        message: `Hi ${user.name},\n\nWelcome to our store! We are thrilled to have you here.\n\nCheers,\nThe Corvet Team`
+      });
+    } catch (e) { console.error('Email failed:', e.message); }
 
-    const token = jwt.sign({ id: admin._id, email: admin.email, role: admin.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-    res.json({ message: 'Login successful', token, admin: { id: admin._id, name: admin.name, email: admin.email } });
+    const token = signToken(user._id);
+    res.status(201).json({ token, user: { id: user._id, name, email, role: user.role } });
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: err.message });
   }
 });
 
-// POST /api/auth/send-otp — Phone OTP (simulated)
-router.post('/send-otp', async (req, res) => {
-  const { phone } = req.body;
-  if (!phone || phone.length < 10) return res.status(400).json({ message: 'Valid phone number required' });
-
-  const otp = generateOtp();
-  storeOtp(phone, otp);
-  console.log(`\n📱 OTP for ${phone}: ${otp}\n`);
-  res.json({ message: 'OTP sent (check server console)' });
-});
-
-// POST /api/auth/verify-otp
-router.post('/verify-otp', async (req, res) => {
-  const { phone, otp } = req.body;
-  if (!phone || !otp) return res.status(400).json({ message: 'Phone and OTP required' });
-
-  const valid = verifyOtp(phone, otp);
-  if (!valid) return res.status(401).json({ message: 'Invalid or expired OTP' });
-
-  let admin = await Admin.findOne({ phone });
-  if (!admin) admin = await Admin.findOne({});
-  if (!admin) return res.status(401).json({ message: 'No admin account found' });
-
-  const token = jwt.sign({ id: admin._id, email: admin.email, role: admin.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
-  res.json({ message: 'Verified', token, admin: { id: admin._id, name: admin.name, email: admin.email } });
-});
-
-// GET /api/auth/me — Get current admin
-router.get('/me', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'No token' });
-
+// LOGIN
+router.post('/login', async (req, res) => {
   try {
-    const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
-    const admin = await Admin.findById(decoded.id).select('-password');
-    if (!admin) return res.status(404).json({ message: 'Admin not found' });
-    res.json(admin);
-  } catch {
-    res.status(401).json({ message: 'Invalid token' });
+    const { email, password } = req.body;
+    
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = signToken(user._id);
+    res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

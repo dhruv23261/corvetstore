@@ -9,6 +9,7 @@ export default {
       fontFamily: {
         'playfair': ['"Playfair Display"', 'serif'],
         'inter': ['Inter', 'sans-serif'],
+        'cursive': ['"Great Vibes"', 'cursive'],
       },
       colors: {
         // Warm beige + taupe palette (matches provided screenshots)

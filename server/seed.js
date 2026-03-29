@@ -30,13 +30,15 @@ async function seed() {
   await Order.deleteMany({});
 
   // Create admin
+  const adminEmail = process.env.ADMIN_ID || 'Arun@567.com';
+  const adminPassword = process.env.ADMIN_PASS || 'Arun@567';
   await Admin.create({
-    email: 'sandipsharm4321@gmail.com',
-    password: '12102002',
-    name: 'Sandip Sharma',
-    phone: '+919999999999',
+    email: adminEmail,
+    password: adminPassword,
+    name: 'Arun Admin',
+    phone: '+919999999999', // Keep a default phone
   });
-  console.log('Admin created: sandipsharm4321@gmail.com / 12102002');
+  console.log(`Admin created: ${adminEmail} / ${adminPassword}`);
 
   // Create products
   const products = await Product.insertMany([

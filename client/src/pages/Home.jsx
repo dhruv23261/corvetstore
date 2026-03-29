@@ -5,7 +5,6 @@ import CategoriesBar from '../components/CategoriesBar';
 import HeroSlider from '../components/HeroSlider';
 import CategorySection from '../components/CategorySection';
 import FeaturedProducts from '../components/FeaturedProducts';
-import ShopByVideo from '../components/ShopByVideo';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
 
@@ -14,7 +13,6 @@ const Home = () => {
     <div className="min-h-screen bg-[#F6EFE9]">
       <AnnouncementBar />
       <Navbar cartCount={0} wishlistCount={0} />
-      <CategoriesBar />
       <HeroSlider />
       <CategorySection />
 
@@ -22,7 +20,6 @@ const Home = () => {
       <div className="h-px bg-gradient-to-r from-transparent via-[#DCC8BC]/70 to-transparent mx-8" />
 
       <FeaturedProducts />
-      <ShopByVideo />
 
       {/* Promo banner */}
       <section className="bg-gradient-to-r from-[#8B776E] to-[#6E5B54] py-14 md:py-16 px-6 text-center relative overflow-hidden">

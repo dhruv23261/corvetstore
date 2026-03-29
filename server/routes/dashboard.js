@@ -2,10 +2,10 @@ const express = require('express');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 const Customer = require('../models/Customer');
-const authMiddleware = require('../middleware/auth');
+const { verifyToken } = require('../middleware/auth');
 const router = express.Router();
 
-router.get('/stats', authMiddleware, async (req, res) => {
+router.get('/stats', verifyToken, async (req, res) => {
   try {
     const [totalProducts, totalOrders, totalCustomers, orders] = await Promise.all([
       Product.countDocuments(),
@@ -20,7 +20,7 @@ router.get('/stats', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/recent-activity', authMiddleware, async (req, res) => {
+router.get('/recent-activity', verifyToken, async (req, res) => {
   try {
     const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(5);
     const activity = recentOrders.map(o => ({
