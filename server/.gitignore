@@ -4,3 +4,4 @@ node_modules
 .env.development
 !.env.example
 *.log
+.vercel
