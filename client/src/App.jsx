@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
+// New ScrollToTop component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 import Home from './pages/Home';
 import AdminLayout from './layouts/AdminLayout';
 import Login from './pages/admin/Login';
@@ -13,26 +22,35 @@ import CategoryManagement from './pages/admin/CategoryManagement';
 import ProductPage from './pages/ProductPage';
 import UserLogin from './pages/UserLogin';
 import UserRegister from './pages/UserRegister';
+import UserProfile from './pages/UserProfile';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import CartDrawer from './components/CartDrawer';
 import Checkout from './pages/Checkout';
+import Wishlist from './pages/Wishlist';
+import CategoryPage from './pages/CategoryPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('admin_token'));
 
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <CartDrawer />
-        <Routes>
-          {/* Storefront */}
-          <Route path="/" element={<Home />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/login" element={<UserLogin />} />
-          <Route path="/register" element={<UserRegister />} />
-          <Route path="/checkout" element={<Checkout />} />
+    <WishlistProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <CartDrawer />
+          <Routes>
+            {/* Storefront */}
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/register" element={<UserRegister />} />
+            <Route path="/profile" element={<UserProfile />} />
+             <Route path="/checkout" element={<Checkout />} />
+             <Route path="/wishlist" element={<Wishlist />} />
+             <Route path="/category/:categoryName" element={<CategoryPage />} />
 
-          {/* Admin Login */}
+            {/* Admin Login */}
           <Route
             path="/admin/login"
             element={
@@ -62,6 +80,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </CartProvider>
+    </WishlistProvider>
   );
 }
 

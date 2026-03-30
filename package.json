@@ -1,7 +1,7 @@
 {
-  "name": "corvet",
+  "name": "cavort",
   "version": "1.0.0",
-  "description": "Full-stack CORVET application",
+  "description": "Full-stack CAVORT application",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",

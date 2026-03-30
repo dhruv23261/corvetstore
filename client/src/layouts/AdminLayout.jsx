@@ -38,7 +38,7 @@ export default function AdminLayout({ onLogout }) {
             <span className="text-[#8B776E] font-playfair font-bold text-xl">C</span>
           </div>
           <div>
-            <span className="font-playfair font-semibold text-[#3C2F2A] text-lg block leading-tight">Corvet Admin</span>
+            <span className="font-playfair font-semibold text-[#3C2F2A] text-lg block leading-tight">Cavort Admin</span>
             <span className="text-[10px] text-[#8B776E]">Store Management</span>
           </div>
         </div>

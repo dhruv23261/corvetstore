@@ -7,20 +7,64 @@ const navItems = [
   { id: 'cart', label: 'Cart', badge: 0, icon: (a) => <svg className="w-5 h-5" fill={a ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" /></svg> },
 ];
 
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+
 const MobileBottomNav = () => {
-  const [active, setActive] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { cartCount, setIsCartOpen } = useCart();
+  
+  // simple derive for active tab
+  let active = 'home';
+  if (location.pathname.includes('/profile') || location.pathname.includes('/login')) active = 'account';
+  if (location.hash === '#categories') active = 'categories';
+  
+  const handleNavClick = (id) => {
+    switch (id) {
+      case 'home':
+        if (location.pathname === '/') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          navigate('/');
+        }
+        break;
+      case 'categories':
+        if (location.pathname !== '/') {
+          navigate('/#categories');
+        } else {
+          const el = document.getElementById('categories');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+        break;
+      case 'account':
+        const target = localStorage.getItem('user_token') ? '/profile' : '/login';
+        if (location.pathname === target) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          navigate(target);
+        }
+        break;
+      case 'cart':
+        setIsCartOpen(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white/95 backdrop-blur-md border-t border-[#DCC8BC]/70 shadow-[0_-4px_30px_rgba(60,47,42,0.06)]">
       <div className="flex items-center justify-around px-2 pt-2.5 pb-4">
         {navItems.map(item => {
           const isActive = active === item.id;
           return (
-            <button key={item.id} onClick={() => setActive(item.id)} className="flex flex-col items-center gap-1 relative px-4 py-1">
+            <button key={item.id} onClick={() => handleNavClick(item.id)} className="flex flex-col items-center gap-1 relative px-4 py-1">
               <span className={`absolute -top-1 w-5 h-0.5 rounded-full bg-[#8B776E] transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} />
               <div className={`relative transition-all duration-200 ${isActive ? 'text-[#8B776E] scale-110' : 'text-[#8B776E]/30'}`}>
                 {item.icon(isActive)}
-                {item.id === 'cart' && (
-                  <span className="absolute -top-2 -right-2 bg-[#8B776E] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{item.badge}</span>
+                {item.id === 'cart' && cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#8B776E] text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{cartCount}</span>
                 )}
               </div>
               <span className={`text-[10px] font-inter font-semibold transition-colors duration-200 ${isActive ? 'text-[#8B776E]' : 'text-[#8B776E]/30'}`}>{item.label}</span>

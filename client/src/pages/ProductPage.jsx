@@ -4,12 +4,14 @@ import api from '../utils/api';
 import { useCart } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import AnnouncementBar from '../components/AnnouncementBar';
+import { useWishlist } from '../context/WishlistContext';
+import MobileBottomNav from '../components/MobileBottomNav';
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart, setIsCartOpen } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,10 +51,10 @@ const ProductPage = () => {
   if (!product) return <div className="p-20 text-center font-playfair text-2xl">Product not found.</div>;
 
   const originalPriceDisplay = product.originalPrice || Math.round(product.price * 1.3);
+  const isWishlisted = isInWishlist(product._id);
 
   return (
-    <div className="min-h-screen bg-[#F0E7DD] font-inter text-[#3C2F2A] pb-24 md:pb-0">
-      <AnnouncementBar />
+    <div className="min-h-screen bg-[#F0E7DD] font-inter text-[#3C2F2A] pb-24 md:pb-0 pt-[108px] md:pt-[172px]">
       <Navbar />
 
       <main className="max-w-screen-xl mx-auto px-4 py-4 md:py-8">
@@ -136,12 +138,22 @@ const ProductPage = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col gap-3 pt-4">
-                <button 
-                  onClick={() => addToCart(product, quantity, selectedSize)}
-                  className="w-full bg-[#8B776E] hover:bg-[#6E5B54] text-white font-bold py-4 rounded-xl shadow-sm transition-all uppercase tracking-widest text-[11px]"
-                >
-                  Add To Cart
-                </button>
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => addToCart(product, quantity, selectedSize)}
+                    className="flex-1 bg-[#8B776E] hover:bg-[#6E5B54] text-white font-bold py-4 rounded-xl shadow-sm transition-all uppercase tracking-widest text-[11px]"
+                  >
+                    Add To Cart
+                  </button>
+                  <button 
+                    onClick={() => toggleWishlist(product)}
+                    className={`w-14 flex items-center justify-center rounded-xl border transition-all ${isWishlisted ? 'bg-rose-50 border-rose-200 text-rose-500' : 'bg-white border-[#DCC8BC] text-[#8B776E]'}`}
+                  >
+                    <svg className={`w-6 h-6 ${isWishlisted ? 'fill-current' : ''}`} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                  </button>
+                </div>
                 <button 
                   onClick={() => {
                     addToCart(product, quantity, selectedSize);
@@ -246,30 +258,7 @@ const ProductPage = () => {
       </main>
 
       <Footer />
-
-      {/* Mobile Bottom Nav Bar */}
-      <nav className="fixed md:hidden bottom-0 left-0 right-0 h-16 bg-white border-t border-[#DCC8BC]/40 px-6 flex items-center justify-between z-50">
-        <button onClick={() => navigate('/')} className="flex flex-col items-center gap-1 group">
-          <svg className="w-5 h-5 text-black group-hover:text-[#8B776E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-          <span className="text-[9px] font-bold text-black uppercase transition-colors group-hover:text-[#8B776E]">Home</span>
-        </button>
-        <button className="flex flex-col items-center gap-1 group">
-          <svg className="w-5 h-5 text-black group-hover:text-[#8B776E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span className="text-[9px] font-bold text-black uppercase transition-colors group-hover:text-[#8B776E]">Play</span>
-        </button>
-        <button className="flex flex-col items-center gap-1 group">
-          <svg className="w-5 h-5 text-black group-hover:text-[#8B776E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
-          <span className="text-[9px] font-bold text-black uppercase transition-colors group-hover:text-[#8B776E]">Categories</span>
-        </button>
-        <button onClick={() => navigate('/login')} className="flex flex-col items-center gap-1 group">
-          <svg className="w-5 h-5 text-black group-hover:text-[#8B776E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-          <span className="text-[9px] font-bold text-black uppercase transition-colors group-hover:text-[#8B776E]">Account</span>
-        </button>
-        <button onClick={() => setIsCartOpen(true)} className="flex flex-col items-center gap-1 group">
-          <svg className="w-5 h-5 text-black group-hover:text-[#8B776E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-          <span className="text-[9px] font-bold text-black uppercase transition-colors group-hover:text-[#8B776E]">Cart</span>
-        </button>
-      </nav>
+      <MobileBottomNav />
     </div>
   );
 };

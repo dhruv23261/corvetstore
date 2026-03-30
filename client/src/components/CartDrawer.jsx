@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const CartDrawer = () => {
   const { cartItems, removeFromCart, updateQuantity, isCartOpen, setIsCartOpen, cartTotal } = useCart();
+  const navigate = useNavigate();
+
+  // Handle body scroll locking
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isCartOpen]);
 
   if (!isCartOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-[105] overflow-hidden pointer-events-none">
       <div 
         className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto ${isCartOpen ? 'opacity-100' : 'opacity-0'}`}
         onClick={() => setIsCartOpen(false)}
       />
       
-      <div className={`absolute right-0 top-0 bottom-0 w-full max-w-[420px] bg-white shadow-2xl flex flex-col transition-transform duration-500 pointer-events-auto ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`absolute right-0 top-[108px] md:top-[172px] bottom-0 w-full max-w-[420px] bg-white shadow-2xl flex flex-col transition-transform duration-500 pointer-events-auto border-l border-[#DCC8BC]/30 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         {/* Header */}
         <div className="p-6 border-b border-[#F6EFE9] flex items-center justify-between">
           <h2 className="font-playfair text-xl font-bold text-[#3C2F2A]">Your Shopping Bag</h2>
@@ -91,7 +107,13 @@ const CartDrawer = () => {
               <span className="text-sm font-bold text-[#8B776E]">Total:</span>
               <span className="text-xl font-bold text-[#3C2F2A]">Rs. {cartTotal.toLocaleString('en-IN')}.00</span>
             </div>
-            <button className="w-full bg-[#8B776E] hover:bg-[#6E5B54] text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] uppercase tracking-widest text-xs">
+            <button 
+              onClick={() => {
+                setIsCartOpen(false);
+                navigate('/checkout');
+              }}
+              className="w-full bg-[#8B776E] hover:bg-[#6E5B54] text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] uppercase tracking-widest text-xs"
+            >
               Checkout Bag
             </button>
             <p className="text-center text-[9px] text-[#8B776E] font-medium italic">Shipping & Taxes calculated at checkout.</p>

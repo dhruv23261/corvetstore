@@ -27,13 +27,13 @@ const UserLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6EFE9] flex flex-col">
+    <div className="min-h-screen bg-[#F6EFE9] flex flex-col pt-[108px] md:pt-[172px]">
       <Navbar />
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
+      <div className="flex-1 flex items-center justify-center px-4 py-16 md:py-24">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-[#DCC8BC]/30">
           <div className="text-center mb-10">
             <h1 className="font-playfair text-3xl font-bold text-[#3C2F2A] mb-2">Welcome Back</h1>
-            <p className="text-[#8B776E] text-sm">Login to your Corvet account.</p>
+            <p className="text-[#8B776E] text-sm">Login to your Cavort account.</p>
           </div>
 
           {error && <div className="bg-rose-50 text-rose-600 p-3 rounded-lg text-xs font-bold mb-6 border border-rose-100">{error}</div>}

@@ -1,5 +1,4 @@
 import React from 'react';
-import AnnouncementBar from '../components/AnnouncementBar';
 import Navbar from '../components/Navbar';
 import CategoriesBar from '../components/CategoriesBar';
 import HeroSlider from '../components/HeroSlider';
@@ -10,9 +9,8 @@ import MobileBottomNav from '../components/MobileBottomNav';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[#F6EFE9]">
-      <AnnouncementBar />
-      <Navbar cartCount={0} wishlistCount={0} />
+    <div className="min-h-screen bg-[#F6EFE9] pt-[108px] md:pt-[172px]">
+      <Navbar />
       <HeroSlider />
       <CategorySection />
 

@@ -12,7 +12,7 @@ export default function Login({ onLogin }) {
     if (!email || !password) return setError('Fill in all fields');
     setLoading(true); setError('');
     try {
-      const { data } = await api.post('/auth/login', { email, password });
+      const { data } = await api.post('/auth/admin-login', { email, password });
       localStorage.setItem('admin_token', data.token);
       localStorage.setItem('admin_user', JSON.stringify(data.admin));
       onLogin();
@@ -33,7 +33,7 @@ export default function Login({ onLogin }) {
           <div className="w-16 h-16 rounded-3xl bg-white mx-auto flex items-center justify-center mb-4 shadow-lg shadow-[#DCC8BC]/55">
             <span className="font-playfair font-bold text-3xl text-[#8B776E]">C</span>
           </div>
-          <h1 className="font-playfair text-3xl font-semibold text-[#3C2F2A]">Corvet Admin</h1>
+          <h1 className="font-playfair text-3xl font-semibold text-[#3C2F2A]">Cavort Admin</h1>
           <p className="text-[#8B776E] text-sm mt-2">Sign in to manage your store</p>
         </div>
 

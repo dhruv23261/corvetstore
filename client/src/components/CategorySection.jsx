@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 
 const CategorySection = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -32,7 +34,7 @@ const CategorySection = () => {
   if (!categories.length) return null;
 
   return (
-    <section className="bg-[#F6EFE9] py-10 px-4">
+    <section id="categories" className="bg-[#F6EFE9] py-10 px-4">
       <div className="max-w-screen-xl mx-auto">
         <h2 className="font-playfair text-2xl md:text-3xl font-bold text-[#3C2F2A] mb-1">
           Categories
@@ -44,7 +46,7 @@ const CategorySection = () => {
           {categories.map(cat => (
             <button
               key={cat._id}
-              onClick={() => alert(`Browsing products in ${cat.name}...`)}
+              onClick={() => navigate(`/category/${cat.name}`)}
               className="flex flex-col items-center gap-2.5 flex-shrink-0 group cursor-pointer"
             >
               {/* Circle image — exactly like reference */}

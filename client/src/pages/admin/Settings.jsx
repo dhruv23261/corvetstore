@@ -16,10 +16,10 @@ export default function Settings() {
           <h2 className="font-playfair text-lg font-semibold text-[#3C2F2A] mb-5">Store Information</h2>
           <div className="space-y-4">
             <div>
-              <input id="storeName" type="text" defaultValue="Corvet" className={inputClass} />
+              <input id="storeName" type="text" defaultValue="Cavort" className={inputClass} />
             </div>
             <div>
-              <input id="storeEmail" type="email" defaultValue="corvet@gmail.com" className={inputClass} />
+              <input id="storeEmail" type="email" defaultValue="indiaonlinestore20@gmail.com" className={inputClass} />
             </div>
           </div>
         </div>
